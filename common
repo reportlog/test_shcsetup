@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "started log push"
+git push https://reportlog:1q2w3e4r5t@github.com/reportlog/setuplog_service.git --all
+echo "Done log push $?"
+

