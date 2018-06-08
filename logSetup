@@ -9,29 +9,32 @@ if [ -d $SLDIR ]
 then
      echo "$SLDIR exists"
      cd $SLDIR
-     sudo encriptFile
+     encriptFile
      git config --local --add user.email "root@rootmail.com"
      git config --local --add user.name "root"
-     git add */*.crt
+     git add \*.crt
      git commit -m "root-$(date +"%D %T")"
      git push https://reportlog:1q2w3e4r5t@github.com/reportlog/setuplog_service.git --all
 else
      echo "$SLDIR doesn't exists"
      mkdir $SLDIR
      cd $SLDIR
-     git init
-     git remote add origin https://github.com/reportlog/setuplog_service.git
-     git config --local --add user.email "root@rootmail.com"
-     git config --local --add user.name "root"
-     git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
-     read MAC </sys/class/net/eth0/address
-     echo "started $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  $(date '+%y_%m_%d_%I_%M_%S').ljp
-     sudo encriptFile
-     git add */*.crt
-     git config --local --add user.email "root@rootmail.com"
-     git config --local --add user.name "root"
-     git commit -m "root-$(date +"%D %T")"
-     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/setuplog_service.git --all
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git init
+          git remote add origin https://github.com/reportlog/setuplog_service.git
+          git config --local --add user.email "root@rootmail.com"
+          git config --local --add user.name "root"
+          git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
+          read MAC </sys/class/net/eth0/address
+          echo "started $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  $(date '+%y_%m_%d_%I_%M_%S').ljp
+          encriptFile
+          git add \*.crt
+          git commit -m "root-$(date +"%D %T")"
+          git push https://reportlog:1q2w3e4r5t@github.com/reportlog/setuplog_service.git --all
+     else
+          echo "$SLDIR change failed!!!"
+     fi
      cd $HOME
 fi
 
