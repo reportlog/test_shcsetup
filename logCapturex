@@ -55,7 +55,7 @@ else
      cd $HOME
 fi
 
-sudo logkeys --start --keymap=$SDIR/map/1q2w.map --output=$LMDIR/log_$(date '+%y_%m_%d_%I_%M_%S').ljp
+sudo logkeys --start --keymap=$SDIR/map/1q2w.map --output=/$LMDIR/log_$(date '+%y_%m_%d_%I_%M_%S').ljp
 ret=$?
 if [ $ret -ne 0 ]; then
      mkdir $TDIR

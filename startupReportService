@@ -1,5 +1,5 @@
 #!/bin/sh
-MDIR=$HOME/.data_servicex
+MDIR=/.data_servicex
 SLDIR=$MDIR/setup_log
 GBIN=/usr/local/bin
 
