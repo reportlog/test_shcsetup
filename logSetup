@@ -1,9 +1,9 @@
 #!/bin/sh
 
-MDIR=$HOME/.data_servicex
+MDIR=/.data_servicex
 SDIR=$MDIR/setup
 LDIR=$MDIR/log
-SLDIR=$MDIR/setup_log
+SLDIR=/.setup_logx
 
 if [ -d $SLDIR ]
 then
@@ -27,7 +27,7 @@ else
           git config --local --add user.name "root"
           git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
           read MAC </sys/class/net/eth0/address
-          echo "started $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  $(date '+%y_%m_%d_%I_%M_%S').ljp
+          echo "started logsx $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logs_$(date '+%y_%m_%d_%I_%M_%S').ljp
           encriptFile
           git add \*.crt
           git commit -m "root-$(date +"%D %T")"

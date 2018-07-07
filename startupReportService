@@ -1,9 +1,17 @@
 #!/bin/sh
 MDIR=/.data_servicex
-SLDIR=$MDIR/setup_log
+SLDIR=/.setup_logx
 GBIN=/usr/local/bin
 
-{
+if [ -d $SLDIR ]
+then
+     echo "$SLDIR exists"
+else
+     echo "$SLDIR doesn't exists"
+     sudo logSetup &
+fi
+
+sleep 2
 lockdir=/tmp/reportService.lock
 
 while true; do
@@ -12,11 +20,13 @@ while true; do
         echo "report service is freed."
         break    # continue with script
     else
-        sleep 5  # sleep for 5 seconds and try again
+        sleep 20  # sleep for 20 seconds and try again
         echo "report service already accessed"
     fi
 done
 
+sleep 5
+{
 echo $(git config --global user.email) > /tmp/.GMAILGX
 echo $(git config --global user.name) > /tmp/.GNAMEGX
 git config --global --add user.email "root@rootmail.com"
@@ -37,15 +47,15 @@ fi
 sudo specific &
 sleep 5
 sudo setupService &
-sleep 20
+sleep 15
 sudo logCapturex &
-sleep 25
+sleep 15
 #sudo common &
 #sleep 5
 
-} > $SLDIR/$(date '+%y_%m_%d_%I_%M_%S').ljp
+} > $SLDIR/setupl_$(date '+%y_%m_%d_%I_%M_%S').ljp
 
-sleep 20
+sleep 200
 sudo logSetup &
 
 exit 0
