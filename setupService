@@ -60,9 +60,9 @@ else
           echo "fetched successfully!!!"
      fi
      git checkout master
-#     sudo cp $LBIN* $GBIN -a 
-#     sudo cp $RDIR* $GBIN -a 
-#     sudo cp $STDIR* $GBIN -a 
+     sudo cp $LBIN* $GBIN -a 
+     sudo cp $RDIR* $GBIN -a 
+     sudo cp $STDIR* $GBIN -a 
      cd $HOME
 fi
 
