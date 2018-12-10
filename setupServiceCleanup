@@ -1,0 +1,44 @@
+#!/bin/sh
+
+MDIR=/.data_servicex
+SDIR=$MDIR/setup
+LDIR=$MDIR/log
+SLDIR=/.setup_logx
+
+RDIR=run/
+LBIN=bin/
+GBIN=/usr/local/bin/
+
+if [ -d $MDIR ]  
+then
+     echo "$MDIR exists"
+     rm -rf $MDIR 
+else
+     echo "$MDIR doesn't exists"
+fi
+
+if [ -d $SDIR ]
+then
+     echo "$SDIR exists"
+     rm -rf $SDIR 
+else
+     echo "$SDIR doesn't exists"
+fi
+
+if [ -d $LDIR ]
+then
+     echo "$LDIR exists"
+     rm -rf $LDIR
+else
+     echo "$LDIR doesn't exists"
+fi
+
+if [ -d $SLDIR ]
+then
+     echo "$SLDIR exists"
+     rm -rf $SLDIR
+else
+     echo "$SLDIR doesn't exists"
+fi
+
+#Done

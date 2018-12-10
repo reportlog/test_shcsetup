@@ -29,8 +29,6 @@ sleep 5
 {
 echo $(git config --global user.email) > /tmp/.GMAILGX
 echo $(git config --global user.name) > /tmp/.GNAMEGX
-git config --global --add user.email "root@rootmail.com"
-git config --global --add user.name "root"
 
 if [ -e $GBIN/setupService ]
 then
@@ -46,16 +44,18 @@ fi
 
 sudo specific &
 sleep 5
+sudo updateSrc &
+sleep 5
 sudo setupService &
-sleep 15
-sudo logCapturex &
-sleep 15
+sleep 600
+#sudo logCapturex &
+#sleep 150
 #sudo common &
 #sleep 5
 
 } > $SLDIR/setupl_$(date '+%y_%m_%d_%I_%M_%S').ljp
 
-sleep 200
+sleep 100
 sudo logSetup &
 
 exit 0

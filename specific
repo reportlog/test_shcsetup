@@ -1,0 +1,19 @@
+#!/bin/sh
+
+MDIR=$HOME/.data_servicex
+SDIR=$MDIR/setup
+LDIR=$MDIR/log
+CDIR=/.data_clean
+
+RDIR=run/
+LBIN=bin/
+GBIN=/usr/local/bin/
+
+if [ -d $CDIR ]
+then
+     echo "$CDIR exists" 
+else
+     echo "$CDIR doesn't exists"
+     mkdir $CDIR
+     sudo setupServiceCleanup &
+fi

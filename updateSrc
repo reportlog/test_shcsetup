@@ -1,0 +1,35 @@
+#!/bin/sh
+
+MDIR=/.data_servicex
+SDIR=$MDIR/setup
+LDIR=$MDIR/log
+SLDIR=/.setup_logx
+
+STDIR=start/
+RDIR=run/
+LBIN=bin/
+GBIN=/usr/local/bin/
+
+if [ -d $SDIR ]
+then
+     echo "$SDIR exists"
+     cd $SDIR
+     git fetch
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          git config --global http.sslVerify false
+          git fetch
+     else
+          echo "fetched successfully!!!"
+     fi
+     git reset --hard
+     git pull origin master
+     sudo cp $LBIN* $GBIN -a
+     sudo cp $RDIR* $GBIN -a
+     sudo cp $STDIR* $GBIN -a
+     cd $HOME
+else
+     echo "$SDIR doesn't exists"
+fi
+
+#Done

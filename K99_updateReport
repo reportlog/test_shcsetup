@@ -11,19 +11,15 @@ GBIN=/usr/local/bin/
 
 lockdir=/tmp/reportService.lock
 
-echo $(git config --global user.email) > /tmp/.GMAILSX
-echo $(git config --global user.name) > /tmp/.GNAMESX
-git config --global --add user.email "root@rootmail.com"
-git config --global --add user.name "root"
-
 LMDIR=$LDIR/$(date '+%Y-%m')
 
 if [ -d $LMDIR ]
 then
      echo "$LMDIR exists"
      cd $LMDIR
-     sudo encriptFile
-     git add \*.crt
+#     sudo encriptFile
+#     git add \*.crt
+     git add \*.ljp
      git commit -m "root-$(date +"%D %T")"
      git push https://reportlog:1q2w3e4r5t@github.com/reportlog/log_service.git --all
      ret=$?
@@ -40,8 +36,4 @@ fi
 
 sudo rm -rf $lockdir
 
-read GMAILX </tmp/.GMAILSX
-read GNAMEX </tmp/.GNAMESX
-git config --global --add user.name "$GNAMEX"
-git config --global --add user.email "$GMAILX"
 exit 0

