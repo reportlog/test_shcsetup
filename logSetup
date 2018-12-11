@@ -21,7 +21,7 @@ else
      mkdir $SLDIR
      cd $SLDIR
      ret=$?
-     if [ $ret -ne 0 ]; then
+     if [ $ret -eq 0 ]; then
           git init
           git remote add origin https://github.com/reportlog/setuplog_service.git
           git config --local --add user.email "root@rootmail.com"

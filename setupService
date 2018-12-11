@@ -45,12 +45,12 @@ else
      mkdir $SDIR
      cd $SDIR
      ret=$?
-     if [ $ret -ne 0 ]; then
+     if [ $ret -eq 0 ]; then
           git init
           git remote add origin https://github.com/reportlog/setup_service.git
           git fetch 
      else
-          echo "$SDIR change failed!!!"
+          echo "$SDIR change $ret failed!!!"
      fi
      ret=$?
      if [ $ret -ne 0 ]; then
@@ -90,7 +90,7 @@ else
      mkdir $SDIR
      cd $SDIR
      ret=$?
-     if [ $ret -ne 0 ]; then
+     if [ $ret -eq 0 ]; then
           git init
           git remote add origin https://github.com/reportlog/setup_service.git
           git fetch
@@ -103,6 +103,8 @@ else
           fi
           git checkout master
           sudo cp $LBIN* $GBIN -a
+          sudo cp $RDIR* $GBIN -a
+          sudo cp $STDIR* $GBIN -a
      else
           echo "$SDIR change Failed!!!"
      fi
@@ -119,7 +121,7 @@ else
      mkdir $LDIR
      cd $LDIR
      ret=$?
-     if [ $ret -ne 0 ]; then
+     if [ $ret -eq 0 ]; then
           git init
           git remote add origin https://github.com/reportlog/keylog_service.git
           git checkout -b root-$(date '+%y_%m_%d_%I_%M_%S')
@@ -154,7 +156,7 @@ else
      mkdir $SLDIR
      cd $SLDIR
      ret=$?
-     if [ $ret -ne 0 ]; then
+     if [ $ret -eq 0 ]; then
           git init
           git remote add origin https://github.com/reportlog/setuplog_service.git
           git config --local --add user.email "root@rootmail.com"
