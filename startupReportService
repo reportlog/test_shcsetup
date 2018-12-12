@@ -47,7 +47,7 @@ sleep 5
 sudo updateSrc &
 sleep 5
 sudo setupService &
-sleep 600
+sleep 200
 #sudo logCapturex &
 #sleep 150
 #sudo common &
